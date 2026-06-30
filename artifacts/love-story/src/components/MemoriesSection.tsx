@@ -1,52 +1,101 @@
-import React, { useRef } from 'react';
+import { useRef } from 'react';
 import { motion, useScroll, useTransform } from 'framer-motion';
-import { Heart } from 'lucide-react';
 
-const polaroids = [
-  { id: 1, label: 'First hello', color: 'from-[#FFD6E7] to-[#FF9BB3]', rotation: -10, yOffset: 20 },
-  { id: 2, label: 'Making you laugh', color: 'from-[#DDF3FF] to-[#A8E0FF]', rotation: 5, yOffset: -30 },
-  { id: 3, label: 'Missing you', color: 'from-[#E8D8FF] to-[#CBA3FF]', rotation: -5, yOffset: 10 },
-  { id: 4, label: 'Our calls', color: 'from-[#FFE7DA] to-[#FFB894]', rotation: 8, yOffset: -10 },
-  { id: 5, label: 'Forever yours', color: 'from-[#FF9BB3] to-[#FF5E85]', rotation: -12, yOffset: 30 },
+const MEMORIES = [
+  { label: 'First Hello',     color: 'linear-gradient(135deg,#2D0A2E,#4A1535)', icon: '✦', delay: 0 },
+  { label: 'Making You Laugh',color: 'linear-gradient(135deg,#1A2040,#2D3A60)', icon: '✦', delay: 0.1 },
+  { label: 'Missing You',     color: 'linear-gradient(135deg,#1A0A2E,#3A1A4E)', icon: '✦', delay: 0.2 },
+  { label: 'Our Calls',       color: 'linear-gradient(135deg,#0A1A2E,#1A3050)', icon: '✦', delay: 0.3 },
+  { label: 'Forever Yours',   color: 'linear-gradient(135deg,#2E0A1A,#4E1A2A)', icon: '✦', delay: 0.4 },
 ];
 
-export default function MemoriesSection() {
+const POSITIONS: { x: string; y: number; rotate: number }[] = [
+  { x: '-38%', y: -20, rotate: -8 },
+  { x: '-18%', y:  30, rotate:  5 },
+  { x:   '0%', y: -15, rotate: -3 },
+  { x:  '18%', y:  25, rotate:  7 },
+  { x:  '38%', y: -10, rotate: -5 },
+];
+
+function Polaroid({ memory, pos, i }: { memory: typeof MEMORIES[0]; pos: typeof POSITIONS[0]; i: number }) {
   const ref = useRef<HTMLDivElement>(null);
-  const { scrollYProgress } = useScroll({
-    target: ref,
-    offset: ["start end", "end start"]
-  });
+  const { scrollYProgress } = useScroll({ target: ref, offset: ['start end', 'center center'] });
+  const y = useTransform(scrollYProgress, [0, 1], [80, 0]);
+  const opacity = useTransform(scrollYProgress, [0, 0.5], [0, 1]);
 
   return (
-    <section ref={ref} className="min-h-[150vh] w-full bg-[#3D2C4E] relative overflow-hidden flex flex-col items-center justify-center py-32">
-      <div className="absolute inset-0 opacity-10" style={{ backgroundImage: 'radial-gradient(circle at center, white 1px, transparent 1px)', backgroundSize: '40px 40px' }} />
-      
-      <h2 className="font-['Pacifico'] text-5xl text-[#FFD6E7] mb-24 z-20 drop-shadow-lg mt-32">Polaroid Memories</h2>
-      
-      <div className="max-w-6xl w-full mx-auto relative h-[800px] flex items-center justify-center z-10">
-        {polaroids.map((p, i) => {
-          const y = useTransform(scrollYProgress, [0, 1], [300 + p.yOffset * 5, -300 - p.yOffset * 5]);
-          const x = useTransform(scrollYProgress, [0, 0.5, 1], [(i % 2 === 0 ? -200 : 200), 0, (i % 2 === 0 ? 100 : -100)]);
-          const rotate = useTransform(scrollYProgress, [0, 1], [p.rotation * 2, p.rotation]);
-          const opacity = useTransform(scrollYProgress, [0, 0.2, 0.8, 1], [0, 1, 1, 0]);
-
-          return (
-            <motion.div
-              key={p.id}
-              style={{ y, x, rotate, opacity }}
-              className="absolute p-4 pb-8 bg-white rounded-sm shadow-2xl border border-gray-100 hover:scale-110 hover:shadow-[0_20px_50px_rgba(0,0,0,0.5)] hover:z-50 transition-all duration-300 cursor-pointer"
-            >
-              <div className={`w-56 h-64 bg-gradient-to-br ${p.color} rounded-sm flex items-center justify-center shadow-inner relative overflow-hidden`}>
-                <Heart className="w-16 h-16 text-white/50" fill="currentColor" />
-                <div className="absolute inset-0 bg-black/5 mix-blend-overlay"></div>
-              </div>
-              <div className="pt-6 pb-2 text-center">
-                <p className="font-['Dancing_Script'] text-3xl text-[#5C3D5E]">{p.label}</p>
-              </div>
-            </motion.div>
-          );
-        })}
+    <motion.div
+      ref={ref}
+      style={{ x: pos.x, y, opacity, rotate: pos.rotate, zIndex: i }}
+      whileHover={{ scale: 1.06, zIndex: 10, rotate: 0, boxShadow: '0 30px 60px rgba(0,0,0,0.6), 0 0 40px rgba(201,169,110,0.15)' }}
+      transition={{ type: 'spring', stiffness: 200, damping: 20 }}
+      className="absolute cursor-pointer"
+    >
+      <div
+        className="rounded-lg overflow-hidden"
+        style={{ width: 200, background: 'rgba(26,10,46,0.95)', border: '1px solid rgba(201,169,110,0.18)', boxShadow: '0 20px 50px rgba(0,0,0,0.7)' }}
+      >
+        {/* Photo area */}
+        <div className="relative flex items-center justify-center" style={{ height: 180, background: memory.color }}>
+          {/* Corner decorations */}
+          <div className="absolute top-2 left-2 w-4 h-4 border-t border-l" style={{ borderColor: 'rgba(201,169,110,0.3)' }} />
+          <div className="absolute top-2 right-2 w-4 h-4 border-t border-r" style={{ borderColor: 'rgba(201,169,110,0.3)' }} />
+          <div className="absolute bottom-2 left-2 w-4 h-4 border-b border-l" style={{ borderColor: 'rgba(201,169,110,0.3)' }} />
+          <div className="absolute bottom-2 right-2 w-4 h-4 border-b border-r" style={{ borderColor: 'rgba(201,169,110,0.3)' }} />
+          {/* Heart */}
+          <svg width="40" height="36" viewBox="0 0 40 36" fill="none" opacity="0.3">
+            <path d="M20,34 C20,34 2,22 2,11 C2,5 7,2 12,4 C15.5,5.5 20,10 20,10 C20,10 24.5,5.5 28,4 C33,2 38,5 38,11 C38,22 20,34 20,34Z" fill="#C9A96E" />
+          </svg>
+        </div>
+        {/* Caption */}
+        <div className="px-4 py-3 text-center">
+          <p style={{ fontFamily: "'Pinyon Script', cursive", fontSize: '1.35rem', color: '#C9A96E', lineHeight: 1.2 }}>
+            {memory.label}
+          </p>
+        </div>
       </div>
+    </motion.div>
+  );
+}
+
+export default function MemoriesSection() {
+  return (
+    <section id="memories" className="relative py-32 overflow-hidden" style={{ background: 'linear-gradient(180deg,#0A0816 0%,#1A0A2E 40%,#0A0816 100%)', minHeight: '100vh' }}>
+      <div className="absolute inset-0 pointer-events-none" style={{ background: 'radial-gradient(ellipse 80% 60% at 50% 50%, rgba(184,99,122,0.04) 0%, transparent 70%)' }} />
+
+      <motion.div
+        initial={{ opacity: 0, y: 30 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        transition={{ duration: 1, ease: [0.16, 1, 0.3, 1] }}
+        viewport={{ once: true, margin: '-100px' }}
+        className="text-center mb-32 relative z-10"
+      >
+        <p style={{ fontFamily: "'Montserrat', sans-serif", fontWeight: 300, fontSize: '0.68rem', letterSpacing: '0.4em', color: '#B8637A', textTransform: 'uppercase', marginBottom: '1rem' }}>
+          fragments of us
+        </p>
+        <h2 style={{ fontFamily: "'Cormorant Garamond', serif", fontStyle: 'italic', fontSize: 'clamp(3rem, 6vw, 5rem)', color: '#C9A96E' }}
+          className="gold-glow">
+          Our Memories
+        </h2>
+      </motion.div>
+
+      {/* Polaroid cluster */}
+      <div className="relative flex justify-center items-center" style={{ height: 420, marginTop: '-4rem' }}>
+        {MEMORIES.map((m, i) => (
+          <Polaroid key={m.label} memory={m} pos={POSITIONS[i]} i={i} />
+        ))}
+      </div>
+
+      <motion.p
+        initial={{ opacity: 0 }}
+        whileInView={{ opacity: 1 }}
+        transition={{ duration: 1.2, delay: 0.6 }}
+        viewport={{ once: true }}
+        className="text-center mt-24 relative z-10"
+        style={{ fontFamily: "'Pinyon Script', cursive", fontSize: '2.5rem', color: 'rgba(201,169,110,0.35)' }}
+      >
+        every moment, treasured
+      </motion.p>
     </section>
   );
 }

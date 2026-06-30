@@ -1,44 +1,39 @@
-import React from 'react';
-
-interface FloatingParticlesProps {
-  count: number;
-  type: 'heart' | 'star' | 'sparkle';
+interface Props {
+  count?: number;
   color?: string;
   size?: number;
+  speed?: 'slow' | 'medium' | 'fast';
 }
 
-export default function FloatingParticles({ count, type, color = '#FFD6E7', size = 20 }: FloatingParticlesProps) {
-  const getIcon = () => {
-    if (type === 'heart') return '❤️';
-    if (type === 'star') return '⭐';
-    return '✨';
-  };
+export default function FloatingParticles({ count = 15, color = '#C9A96E', size = 4, speed = 'medium' }: Props) {
+  const durations = { slow: [8, 14], medium: [5, 10], fast: [3, 6] };
+  const [min, max] = durations[speed];
 
   return (
-    <div className="absolute inset-0 pointer-events-none overflow-hidden z-10" aria-hidden="true">
+    <>
       {Array.from({ length: count }).map((_, i) => {
-        const left = `${Math.random() * 100}%`;
-        const bottom = `-${Math.random() * 20}%`;
-        const animationDuration = `${Math.random() * 5 + 5}s`;
-        const animationDelay = `${Math.random() * 5}s`;
-        const particleSize = size * (0.5 + Math.random() * 0.5);
-
+        const dur = min + Math.random() * (max - min);
+        const delay = Math.random() * 6;
+        const x = Math.random() * 100;
+        const s = (0.5 + Math.random() * 0.8) * size;
+        const opacity = 0.2 + Math.random() * 0.5;
         return (
           <div
             key={i}
-            className="absolute"
+            className="absolute rounded-full pointer-events-none"
             style={{
-              left,
-              bottom,
-              fontSize: `${particleSize}px`,
-              color,
-              animation: `float-up ${animationDuration} ${animationDelay} infinite linear`,
+              width: s,
+              height: s,
+              background: color,
+              left: `${x}%`,
+              bottom: '-10px',
+              opacity,
+              animation: `float-up ${dur}s ease-in ${delay}s infinite`,
+              boxShadow: `0 0 ${s * 2}px ${color}80`,
             }}
-          >
-            {getIcon()}
-          </div>
+          />
         );
       })}
-    </div>
+    </>
   );
 }

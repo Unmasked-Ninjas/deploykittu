@@ -1,0 +1,4 @@
+- [Love Story Auth](love-story-auth.md) — JWT bearer auth added; SESSION_SECRET + SHARED_PASSWORD required at startup (fail-fast); 30d token in localStorage('ls_token')
+- [Love Story Design](love-story-design.md) — Dark cinematic palette (#0A0816 bg, #C9A96E gold, #B8637A rose); Cormorant Garamond / Montserrat / Pinyon Script fonts
+- [Lenis + GSAP sync](lenis-gsap-sync.md) — Use LenisSync null component with plain useEffect (not useGSAP) to avoid React hooks-count violation
+- [GSAP Stale Closure in onUpdate](gsap-on-update-ref.md) — Use a ref to track state inside ScrollTrigger onUpdate callbacks; never close over React state directly

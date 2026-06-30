@@ -1,124 +1,237 @@
-import React, { useRef } from 'react';
+import { useRef } from 'react';
 import { gsap } from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { useGSAP } from '@gsap/react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { useState } from 'react';
+
+gsap.registerPlugin(ScrollTrigger);
+
+function Pigeon() {
+  return (
+    <svg viewBox="0 0 80 60" width="70" height="52" style={{ overflow: 'visible' }}>
+      {/* Body */}
+      <ellipse cx="42" cy="34" rx="26" ry="18" fill="#F0E6D6" />
+      {/* Head */}
+      <circle cx="70" cy="24" r="13" fill="#F0E6D6" />
+      {/* Eye */}
+      <circle cx="75" cy="22" r="2.5" fill="#1A0A2E" />
+      <circle cx="76" cy="21.5" r="0.8" fill="white" />
+      {/* Beak */}
+      <path d="M83,24 L92,26 L83,28Z" fill="#E8845A" />
+      {/* Wing */}
+      <path d="M42,26 C30,10 10,14 8,30 C8,30 25,22 42,26Z"
+        fill="#D4C8B8" style={{ animation: 'wing-flap 0.4s ease-in-out infinite', transformOrigin: '42px 26px' }} />
+      <path d="M42,26 C32,16 14,18 12,30" stroke="#B8A898" strokeWidth="1" fill="none" />
+      {/* Tail */}
+      <path d="M16,34 L4,44 L14,40 L2,52 L18,44Z" fill="#E0D4C4" />
+      {/* Envelope */}
+      <rect x="28" y="50" width="28" height="18" rx="2" fill="#C9A96E" />
+      <path d="M28,50 L42,60 L56,50" stroke="#8B6A3A" strokeWidth="1" fill="none" />
+      <circle cx="42" cy="59" r="4" fill="#B8637A" opacity="0.8" />
+    </svg>
+  );
+}
+
+function Mountains({ colors, snowCaps = false }: { colors: string[]; snowCaps?: boolean }) {
+  const peaks = [[0,400],[120,150],[240,250],[360,80],[480,180],[600,100],[720,220],[840,300],[960,180],[1080,250],[1200,400]];
+  return (
+    <svg viewBox="0 0 1200 400" preserveAspectRatio="none" style={{ position: 'absolute', bottom: 0, width: '100%', height: '100%' }}>
+      {colors.map((c, ci) => {
+        const offset = ci * 30;
+        const pts = peaks.map(([x,y]) => [x, y + offset + (ci * 60)]);
+        return (
+          <polygon key={ci}
+            points={[`0,400`, ...pts.map(([x,y]) => `${x},${y}`), `1200,400`].join(' ')}
+            fill={c} opacity={0.9 - ci * 0.15} />
+        );
+      })}
+      {snowCaps && peaks.filter(([,y]) => y < 200).map(([x,y], i) => (
+        <ellipse key={i} cx={x} cy={y+5} rx={20} ry={10} fill="white" opacity="0.8" />
+      ))}
+    </svg>
+  );
+}
+
+function Stars({ count = 40 }: { count?: number }) {
+  return (
+    <>
+      {Array.from({ length: count }).map((_, i) => (
+        <div key={i} className="absolute rounded-full" style={{
+          width: Math.random() * 2 + 0.5, height: Math.random() * 2 + 0.5,
+          background: '#F0E6D6', left: Math.random() * 100 + '%', top: Math.random() * 60 + '%',
+          animation: `twinkle ${2 + Math.random() * 3}s ease-in-out infinite`,
+          animationDelay: Math.random() * 3 + 's', opacity: 0.6,
+        }} />
+      ))}
+    </>
+  );
+}
+
+const ZONES = [
+  { bg: 'linear-gradient(180deg,#1A1A3E 0%,#2D3A6E 60%,#4A6080 100%)', label: 'Nepal', desc: 'Kathmandu · The Himalayas' },
+  { bg: 'linear-gradient(180deg,#2A2A50 0%,#3A4060 60%,#506070 100%)', label: 'The Clouds', desc: 'High above the world' },
+  { bg: 'linear-gradient(180deg,#050520 0%,#0A0A2A 60%,#151530 100%)', label: 'Night Sky', desc: 'A million stars between us' },
+  { bg: 'linear-gradient(180deg,#0A1A3A 0%,#0A2A4A 50%,#0A3A5A 100%)', label: 'The Ocean', desc: 'The Indian Ocean, endless' },
+  { bg: 'linear-gradient(180deg,#4A1A0A 0%,#C9502A 40%,#E8844A 70%,#F4B06A 100%)', label: 'Sunset', desc: 'Somewhere over Australia' },
+  { bg: 'linear-gradient(180deg,#0A1A3A 0%,#1A3A6A 50%,#E8845A40 100%)', label: 'Sydney', desc: 'The Harbour City · Home' },
+];
+
+const SCENE_W = 600; // vw units (6 * 100vw)
 
 export default function PigeonJourneySection() {
-  const containerRef = useRef<HTMLDivElement>(null);
-  const sceneRef = useRef<HTMLDivElement>(null);
-  const pigeonRef = useRef<HTMLDivElement>(null);
-  const letterRef = useRef<HTMLDivElement>(null);
+  const sectionRef    = useRef<HTMLDivElement>(null);
+  const sceneRef      = useRef<HTMLDivElement>(null);
+  const pigeonRef     = useRef<HTMLDivElement>(null);
+  const letterRef     = useRef<HTMLDivElement>(null);
+  const [letterOpen, setLetterOpen] = useState(false);
+  const letterOpenRef = useRef(false);
 
   useGSAP(() => {
+    const section = sectionRef.current;
+    const scene   = sceneRef.current;
+    const pigeon  = pigeonRef.current;
+    if (!section || !scene || !pigeon) return;
+
+    const totalX = scene.scrollWidth - window.innerWidth;
+
     const tl = gsap.timeline({
       scrollTrigger: {
-        trigger: containerRef.current,
-        start: "top top",
-        end: "+=400%",
-        scrub: true,
+        trigger: section,
+        start: 'top top',
+        end: 'bottom top',
+        scrub: 1.5,
         pin: true,
-      }
+        anticipatePin: 1,
+        onUpdate: (self) => {
+          const shouldOpen = self.progress > 0.88;
+          if (shouldOpen !== letterOpenRef.current) {
+            letterOpenRef.current = shouldOpen;
+            setLetterOpen(shouldOpen);
+          }
+        },
+      },
     });
 
-    tl.to(sceneRef.current, {
-      xPercent: -83.33, 
-      ease: "none",
-      duration: 10
-    });
+    // Slide panorama
+    tl.to(scene, { x: -totalX, ease: 'none', duration: 1 }, 0);
 
-    const letterTl = gsap.timeline({
-      scrollTrigger: {
-        trigger: containerRef.current,
-        start: "top -350%", 
-        end: "+=50%",
-        scrub: true,
-      }
-    });
+    // Pigeon Y undulation (keyframe sine wave, no plugin needed)
+    tl.to(pigeon, {
+      keyframes: {
+        y: [0, -55, 15, -40, 8, -25, 0],
+        ease: 'sine.inOut',
+      },
+      duration: 1,
+      ease: 'none',
+    }, 0);
 
-    letterTl.fromTo(letterRef.current, 
-      { scaleY: 0, opacity: 0 }, 
-      { scaleY: 1, opacity: 1, duration: 1, transformOrigin: "bottom" }
-    );
+    // cleanup scoped to this section only (useGSAP scope handles it)
 
-  }, { scope: containerRef });
+  }, { scope: sectionRef });
 
   return (
-    <section ref={containerRef} className="h-screen w-full overflow-hidden bg-[#DDF3FF] relative">
-      <div ref={sceneRef} className="h-full w-[600vw] flex absolute top-0 left-0">
-        
-        {/* Zone 1: Nepal Mountains */}
-        <div className="w-[100vw] h-full relative bg-gradient-to-b from-[#DDF3FF] to-[#A8E0FF]">
-          <div className="absolute bottom-0 w-full h-[60%] bg-[#5C3D5E]" style={{ clipPath: 'polygon(0% 100%, 0% 50%, 20% 20%, 40% 60%, 60% 10%, 80% 50%, 100% 30%, 100% 100%)' }}></div>
-          <div className="absolute bottom-0 w-full h-[40%] bg-[#3D2C4E]" style={{ clipPath: 'polygon(0% 100%, 0% 60%, 30% 30%, 50% 70%, 70% 40%, 100% 50%, 100% 100%)' }}></div>
-          {/* Snowcaps */}
-          <div className="absolute bottom-[40%] left-[10%] w-[20%] h-[20%] bg-white opacity-80" style={{ clipPath: 'polygon(50% 0%, 0% 100%, 100% 100%)' }}></div>
-          <h2 className="absolute top-20 left-20 font-['Pacifico'] text-5xl text-[#5C3D5E] opacity-50">From Nepal...</h2>
+    <section ref={sectionRef} id="journey" className="relative overflow-hidden" style={{ height: '500vh', background: '#0A0816' }}>
+      <div className="sticky top-0 h-screen overflow-hidden">
+        {/* Wide scene */}
+        <div ref={sceneRef} className="absolute top-0 left-0 h-full flex" style={{ width: `${SCENE_W}vw`, willChange: 'transform' }}>
+          {ZONES.map((z, zi) => (
+            <div key={zi} className="relative flex-shrink-0 overflow-hidden" style={{ width: '100vw', height: '100vh', background: z.bg }}>
+              {/* Night stars */}
+              {zi === 2 && <Stars count={60} />}
+              {/* Crescent moon */}
+              {zi === 2 && (
+                <div className="absolute top-16 right-24">
+                  <svg width="60" height="60" viewBox="0 0 60 60">
+                    <path d="M30,5 A25,25 0 1,1 30,55 A18,18 0 1,0 30,5Z" fill="#F0E6D6" opacity="0.85" />
+                  </svg>
+                </div>
+              )}
+              {/* Nepal mountains */}
+              {zi === 0 && <Mountains colors={['#4A5A8A','#3A4A7A','#2A3A6A']} snowCaps />}
+              {/* Cloud wisps */}
+              {zi === 1 && [15,35,55,72].map((x,i) => (
+                <div key={i} className="absolute" style={{ left:`${x}%`, top: `${20+i*12}%` }}>
+                  <svg width="160" height="60" viewBox="0 0 160 60">
+                    <ellipse cx="80" cy="40" rx="70" ry="25" fill="white" opacity="0.12" />
+                    <ellipse cx="60" cy="32" rx="45" ry="20" fill="white" opacity="0.08" />
+                  </svg>
+                </div>
+              ))}
+              {/* Ocean waves */}
+              {zi === 3 && (
+                <svg className="absolute bottom-0 w-full" viewBox="0 0 1200 200" preserveAspectRatio="none" style={{ height: '40%' }}>
+                  {[0,1,2].map(row => (
+                    <path key={row} d={`M0,${60+row*50} C200,${30+row*50} 400,${90+row*50} 600,${50+row*50} C800,${10+row*50} 1000,${80+row*50} 1200,${40+row*50} L1200,200 L0,200Z`}
+                      fill={`rgba(${10+row*5},${40+row*10},${80+row*15},${0.6-row*0.15})`} />
+                  ))}
+                </svg>
+              )}
+              {/* Sydney skyline */}
+              {zi === 5 && (
+                <svg className="absolute bottom-0 w-full" viewBox="0 0 1200 300" preserveAspectRatio="none" style={{ height: '55%' }}>
+                  {/* Opera House arches */}
+                  <path d="M200,300 Q220,160 250,300Z" fill="#F0E6D6" opacity="0.7" />
+                  <path d="M240,300 Q270,140 305,300Z" fill="#F0E6D6" opacity="0.6" />
+                  <path d="M290,300 Q325,180 360,300Z" fill="#F0E6D6" opacity="0.5" />
+                  {/* Harbour bridge */}
+                  <path d="M400,180 Q600,60 800,180" stroke="#F0E6D6" strokeWidth="4" fill="none" opacity="0.5" />
+                  <line x1="400" y1="180" x2="400" y2="300" stroke="#F0E6D6" strokeWidth="3" opacity="0.4" />
+                  <line x1="800" y1="180" x2="800" y2="300" stroke="#F0E6D6" strokeWidth="3" opacity="0.4" />
+                  {[440,480,520,560,600,640,680,720,760].map((x,i) => (
+                    <line key={i} x1={x} y1="300" x2={x} y2={160 + Math.abs(x-600)*0.18} stroke="#F0E6D6" strokeWidth="1" opacity="0.2" />
+                  ))}
+                  {/* City buildings */}
+                  {[900,930,960,985,1010,1035,1060,1085,1110].map((x,i) => (
+                    <rect key={i} x={x} y={200-(i%3)*40} width={18+i%2*6} height={100+(i%3)*40} fill="#F0E6D6" opacity={0.1+i*0.02} />
+                  ))}
+                </svg>
+              )}
+              {/* Zone label */}
+              <div className="absolute bottom-10 left-1/2 -translate-x-1/2 text-center">
+                <p style={{ fontFamily: "'Cormorant Garamond', serif", fontStyle: 'italic', fontSize: '1rem', color: 'rgba(240,230,214,0.4)', letterSpacing: '0.05em' }}>{z.label}</p>
+                <p style={{ fontFamily: "'Montserrat', sans-serif", fontWeight: 300, fontSize: '0.6rem', letterSpacing: '0.2em', color: 'rgba(240,230,214,0.2)', textTransform: 'uppercase', marginTop: 4 }}>{z.desc}</p>
+              </div>
+            </div>
+          ))}
         </div>
 
-        {/* Zone 2: Misty Clouds */}
-        <div className="w-[100vw] h-full relative bg-gradient-to-b from-[#A8E0FF] to-[#FFF8F3]">
-          <div className="absolute top-1/4 left-10 w-64 h-24 bg-white rounded-full opacity-80 blur-md"></div>
-          <div className="absolute top-1/3 left-1/2 w-96 h-32 bg-white rounded-full opacity-70 blur-lg"></div>
-          <div className="absolute bottom-1/4 right-20 w-80 h-24 bg-white rounded-full opacity-90 blur-md"></div>
+        {/* Fixed pigeon */}
+        <div ref={pigeonRef} className="absolute z-20" style={{ left: '50%', top: '42%', transform: 'translate(-50%,-50%)' }}>
+          <Pigeon />
         </div>
 
-        {/* Zone 3: Night Sky */}
-        <div className="w-[100vw] h-full relative bg-gradient-to-b from-[#1A1025] to-[#3D2C4E]">
-          <div className="absolute top-20 right-32 w-32 h-32 rounded-full bg-[#FFF9C4] shadow-[0_0_60px_rgba(255,249,196,0.8)]"></div>
-          <div className="absolute top-10 left-10 w-2 h-2 bg-white rounded-full animate-[twinkle_2s_infinite]"></div>
-          <div className="absolute top-30 left-1/3 w-3 h-3 bg-white rounded-full animate-[twinkle_3s_infinite]"></div>
-          <div className="absolute top-20 right-1/4 w-2 h-2 bg-white rounded-full animate-[twinkle_2.5s_infinite]"></div>
-          <div className="absolute bottom-40 left-20 w-1.5 h-1.5 bg-white rounded-full animate-[twinkle_1.5s_infinite]"></div>
-        </div>
+        {/* Love letter */}
+        <AnimatePresence>
+          {letterOpen && (
+            <motion.div
+              initial={{ opacity: 0, scale: 0.8, y: 60 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.8, y: 60 }}
+              transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+              className="absolute z-30 left-1/2 -translate-x-1/2 bottom-16 w-[340px] glass-dark rounded-2xl p-8"
+              style={{ boxShadow: '0 30px 60px rgba(0,0,0,0.5)' }}
+            >
+              <p style={{ fontFamily: "'Pinyon Script', cursive", fontSize: '1.4rem', color: '#F0E6D6', lineHeight: 1.8, opacity: 0.85 }}>
+                My dearest love, every mile between us only makes my heart reach further for you.
+                I carry you with me always — in every sunrise, every quiet moment, every breath.
+                <br /><br />
+                <em style={{ color: '#C9A96E' }}>Soon. Soon. Soon.</em>
+                <br /><br />
+                Until then — I love you endlessly.
+              </p>
+              <p style={{ fontFamily: "'Pinyon Script', cursive", fontSize: '1.2rem', color: 'rgba(201,169,110,0.5)', marginTop: '1rem', textAlign: 'right' }}>
+                — From Nepal, with love ✦
+              </p>
+            </motion.div>
+          )}
+        </AnimatePresence>
 
-        {/* Zone 4: Ocean */}
-        <div className="w-[100vw] h-full relative bg-gradient-to-b from-[#3D2C4E] to-[#FF9BB3]">
-          <svg className="absolute bottom-0 w-full h-48" preserveAspectRatio="none" viewBox="0 0 1440 320">
-            <path fill="#4A90E2" fillOpacity="1" d="M0,160L48,176C96,192,192,224,288,213.3C384,203,480,149,576,144C672,139,768,181,864,197.3C960,213,1056,203,1152,176C1248,149,1344,107,1392,85.3L1440,64L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z"></path>
-          </svg>
-          <svg className="absolute bottom-0 w-full h-32 opacity-50" preserveAspectRatio="none" viewBox="0 0 1440 320">
-            <path fill="#DDF3FF" fillOpacity="1" d="M0,224L48,213.3C96,203,192,181,288,186.7C384,192,480,224,576,213.3C672,203,768,149,864,138.7C960,128,1056,160,1152,176C1248,192,1344,192,1392,192L1440,192L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z"></path>
-          </svg>
-        </div>
-
-        {/* Zone 5: Sunset */}
-        <div className="w-[100vw] h-full relative bg-gradient-to-b from-[#FF9BB3] to-[#FFE7DA]">
-          <div className="absolute bottom-10 left-1/2 -ml-48 w-96 h-96 bg-orange-400 rounded-full blur-[60px] opacity-60"></div>
-        </div>
-
-        {/* Zone 6: Sydney Arrival */}
-        <div className="w-[100vw] h-full relative bg-gradient-to-b from-[#FFE7DA] to-[#DDF3FF] flex items-end justify-center pb-20">
-          <h2 className="absolute top-20 right-20 font-['Pacifico'] text-5xl text-[#5C3D5E] opacity-50">...to Sydney</h2>
-          <div className="flex items-end">
-            <div className="w-20 h-32 bg-white border-2 border-gray-200 rounded-tr-[100%] origin-bottom rotate-[-15deg] shadow-lg"></div>
-            <div className="w-32 h-56 bg-white border-2 border-gray-200 rounded-tr-[100%] origin-bottom z-10 shadow-xl"></div>
-            <div className="w-24 h-40 bg-white border-2 border-gray-200 rounded-tr-[100%] origin-bottom rotate-[15deg] -ml-6 shadow-md"></div>
-          </div>
-        </div>
-      </div>
-
-      {/* Fixed Pigeon */}
-      <div ref={pigeonRef} className="absolute top-[40%] left-1/2 -ml-12 z-40 animate-[drift_4s_infinite]">
-        <div className="relative w-24 h-20">
-          <div className="absolute top-5 left-0 w-20 h-12 bg-white rounded-full shadow-md border border-gray-100"></div>
-          <div className="absolute top-0 right-0 w-12 h-12 bg-white rounded-full shadow-md border border-gray-100"></div>
-          <div className="absolute top-5 right-[-8px] w-6 h-4 bg-orange-400 rounded-r-full"></div>
-          <div className="absolute top-4 right-4 w-2 h-2 bg-black rounded-full"></div>
-          <div className="absolute top-3 left-6 w-14 h-8 bg-gray-100 rounded-full origin-left animate-[wing-flap_0.5s_infinite]"></div>
-          <div className="absolute bottom-0 right-6 w-8 h-6 bg-[#FFD6E7] border border-[#FF9BB3] shadow-md rotate-12 flex items-center justify-center">
-             <div className="w-3 h-3 bg-red-400 rounded-full"></div>
-          </div>
-        </div>
-      </div>
-
-      {/* Letter Reveal */}
-      <div className="absolute inset-0 pointer-events-none flex items-center justify-center z-50">
-        <div ref={letterRef} className="w-full max-w-2xl bg-[#FFF8F3] p-12 md:p-16 rounded-2xl shadow-[0_20px_60px_rgba(0,0,0,0.2)] border-4 border-[#FFD6E7] relative opacity-0">
-           <p className="font-['Dancing_Script'] text-3xl md:text-5xl text-[#5C3D5E] leading-relaxed text-center">
-             "My dearest love, every mile between us only makes my heart reach further for you. I carry you with me always — in every sunrise, every quiet moment, every breath. Soon, soon, soon. Until then — I love you endlessly."
-           </p>
-           <div className="absolute -top-8 left-1/2 -ml-8 w-16 h-16 bg-[#FF9BB3] rounded-full flex items-center justify-center text-white shadow-xl text-3xl border-4 border-white">
-             ❤️
-           </div>
+        {/* Section title */}
+        <div className="absolute top-10 left-0 right-0 text-center z-10 pointer-events-none">
+          <p style={{ fontFamily: "'Montserrat', sans-serif", fontWeight: 300, fontSize: '0.65rem', letterSpacing: '0.4em', color: 'rgba(240,230,214,0.25)', textTransform: 'uppercase' }}>
+            Nepal → Sydney
+          </p>
         </div>
       </div>
     </section>
