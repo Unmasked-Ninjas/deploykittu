@@ -1,44 +1,46 @@
-# [Project name]
+# Our Love Story
 
-_Replace the heading above with the project's name, and this line with one sentence describing what this app does for users._
+A scroll-driven interactive love story website with Hello Kitty kawaii aesthetic, built for a long-distance couple (Nepal ↔ Sydney). Features 8 animated sections including a pigeon journey, virtual bouquet maker, and cinematic finale.
 
 ## Run & Operate
 
-- `pnpm --filter @workspace/api-server run dev` — run the API server (port 5000)
+- `pnpm --filter @workspace/love-story run dev` — run the frontend (port assigned by workflow)
+- `pnpm --filter @workspace/api-server run dev` — run the API server
 - `pnpm run typecheck` — full typecheck across all packages
 - `pnpm run build` — typecheck + build all packages
-- `pnpm --filter @workspace/api-spec run codegen` — regenerate API hooks and Zod schemas from the OpenAPI spec
-- `pnpm --filter @workspace/db run push` — push DB schema changes (dev only)
-- Required env: `DATABASE_URL` — Postgres connection string
 
 ## Stack
 
 - pnpm workspaces, Node.js 24, TypeScript 5.9
-- API: Express 5
-- DB: PostgreSQL + Drizzle ORM
-- Validation: Zod (`zod/v4`), `drizzle-zod`
-- API codegen: Orval (from OpenAPI spec)
-- Build: esbuild (CJS bundle)
+- Frontend: React + Vite + Tailwind CSS v4
+- Animations: Framer Motion, GSAP + ScrollTrigger, Lenis smooth scroll
+- Fonts: Nunito, Dancing Script, Pacifico (Google Fonts)
+- No backend needed — purely presentational
 
 ## Where things live
 
-_Populate as you build — short repo map plus pointers to the source-of-truth file for DB schema, API contracts, theme files, etc._
+- `artifacts/love-story/src/pages/Home.tsx` — assembles all 8 sections
+- `artifacts/love-story/src/components/` — one file per section + FloatingParticles
+- `artifacts/love-story/src/index.css` — kawaii theme tokens + keyframe animations
+- `artifacts/love-story/src/App.tsx` — Lenis + GSAP ScrollTrigger integration
 
 ## Architecture decisions
 
-_Populate as you build — non-obvious choices a reader couldn't infer from the code (3-5 bullets)._
+- **Lenis + GSAP sync**: `LenisSync` is a dedicated null-rendering component that uses `useEffect` (not `useGSAP`) to sync Lenis RAF with GSAP's ticker. Using `useGSAP` with a dependency array caused a hooks-count violation due to its internal conditional layout effect.
+- **No backend**: All state (messages, bouquet) is local React state. No API or DB needed.
+- **CSS-only visuals**: All illustrations (cat face, pigeon, mountains, flowers, Opera House) are built with CSS shapes and inline SVG — no image dependencies.
 
 ## Product
 
-_Describe the high-level user-facing capabilities of this app once they exist._
-
-## User preferences
-
-_Populate as you build — explicit user instructions worth remembering across sessions._
-
-## Gotchas
-
-_Populate as you build — sharp edges, "always run X before Y" rules._
+8 interactive sections:
+1. Loading screen — Hello Kitty cat face with animated loading bar
+2. Scroll bouquet — GSAP ScrollTrigger pinned bouquet assembly
+3. Parallax polaroids — cinematic memory cards with Framer Motion
+4. Photo album — 3D page-flip scrapbook
+5. Message wall — interactive sticky notes mailbox
+6. Pigeon journey — 500vh horizontal scroll Nepal → Sydney
+7. Bouquet maker — interactive flower shop
+8. Our Forever — emotional finale with lanterns and starfield
 
 ## Pointers
 

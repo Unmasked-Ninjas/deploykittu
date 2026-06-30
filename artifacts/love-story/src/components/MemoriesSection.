@@ -1,0 +1,52 @@
+import React, { useRef } from 'react';
+import { motion, useScroll, useTransform } from 'framer-motion';
+import { Heart } from 'lucide-react';
+
+const polaroids = [
+  { id: 1, label: 'First hello', color: 'from-[#FFD6E7] to-[#FF9BB3]', rotation: -10, yOffset: 20 },
+  { id: 2, label: 'Making you laugh', color: 'from-[#DDF3FF] to-[#A8E0FF]', rotation: 5, yOffset: -30 },
+  { id: 3, label: 'Missing you', color: 'from-[#E8D8FF] to-[#CBA3FF]', rotation: -5, yOffset: 10 },
+  { id: 4, label: 'Our calls', color: 'from-[#FFE7DA] to-[#FFB894]', rotation: 8, yOffset: -10 },
+  { id: 5, label: 'Forever yours', color: 'from-[#FF9BB3] to-[#FF5E85]', rotation: -12, yOffset: 30 },
+];
+
+export default function MemoriesSection() {
+  const ref = useRef<HTMLDivElement>(null);
+  const { scrollYProgress } = useScroll({
+    target: ref,
+    offset: ["start end", "end start"]
+  });
+
+  return (
+    <section ref={ref} className="min-h-[150vh] w-full bg-[#3D2C4E] relative overflow-hidden flex flex-col items-center justify-center py-32">
+      <div className="absolute inset-0 opacity-10" style={{ backgroundImage: 'radial-gradient(circle at center, white 1px, transparent 1px)', backgroundSize: '40px 40px' }} />
+      
+      <h2 className="font-['Pacifico'] text-5xl text-[#FFD6E7] mb-24 z-20 drop-shadow-lg">Polaroid Memories</h2>
+      
+      <div className="max-w-6xl w-full mx-auto relative h-[800px] flex items-center justify-center z-10">
+        {polaroids.map((p, i) => {
+          const y = useTransform(scrollYProgress, [0, 1], [300 + p.yOffset * 5, -300 - p.yOffset * 5]);
+          const x = useTransform(scrollYProgress, [0, 0.5, 1], [(i % 2 === 0 ? -200 : 200), 0, (i % 2 === 0 ? 100 : -100)]);
+          const rotate = useTransform(scrollYProgress, [0, 1], [p.rotation * 2, p.rotation]);
+          const opacity = useTransform(scrollYProgress, [0, 0.2, 0.8, 1], [0, 1, 1, 0]);
+
+          return (
+            <motion.div
+              key={p.id}
+              style={{ y, x, rotate, opacity }}
+              className="absolute p-4 pb-8 bg-white rounded-sm shadow-2xl border border-gray-100 hover:scale-110 hover:shadow-[0_20px_50px_rgba(0,0,0,0.5)] hover:z-50 transition-all duration-300 cursor-pointer"
+            >
+              <div className={`w-56 h-64 bg-gradient-to-br ${p.color} rounded-sm flex items-center justify-center shadow-inner relative overflow-hidden`}>
+                <Heart className="w-16 h-16 text-white/50" fill="currentColor" />
+                <div className="absolute inset-0 bg-black/5 mix-blend-overlay"></div>
+              </div>
+              <div className="pt-6 pb-2 text-center">
+                <p className="font-['Dancing_Script'] text-3xl text-[#5C3D5E]">{p.label}</p>
+              </div>
+            </motion.div>
+          );
+        })}
+      </div>
+    </section>
+  );
+}

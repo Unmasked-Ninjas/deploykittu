@@ -1,0 +1,390 @@
+# MASTER PROMPT: Create a Cute Interactive Hello Kitty Themed Long-Distance Relationship Website
+
+Create a beautiful, emotional, and interactive long-distance relationship website using **Next.js 15, React, Tailwind CSS, GSAP, ScrollTrigger, Lenis Smooth Scroll, and Framer Motion**.
+
+The website should tell our love story through a **scroll-driven interactive experience** featuring smooth animations, parallax effects, cute transitions, scrapbook aesthetics, and a cozy Hello Kitty inspired theme (inspired by the aesthetic only, not direct copyrighted assets).
+
+The overall atmosphere should feel:
+
+* Warm
+* Cozy
+* Romantic
+* Cute
+* Dreamy
+* Nostalgic
+* Emotional
+* Soft
+* Magical
+
+The website should feel like a combination of:
+
+* An interactive scrapbook
+* A digital love letter
+* A memory diary
+* A cute animated storybook
+
+---
+
+# TECH STACK
+
+Use:
+
+* Next.js 15
+* React
+* Tailwind CSS
+* GSAP
+* GSAP ScrollTrigger
+* Lenis Smooth Scroll
+* Framer Motion
+* CSS animations
+* Lightweight parallax effects
+
+Avoid heavy Three.js scenes. Use:
+
+* Layered parallax
+* PNG/SVG assets
+* CSS transforms
+* GSAP timelines
+* Perspective effects
+* Motion blur effects
+* Animated illustrations
+
+---
+
+# GLOBAL DESIGN
+
+Use a soft kawaii palette:
+
+* Baby Pink (#FFD6E7)
+* Soft Cream (#FFF8F3)
+* Lavender (#E8D8FF)
+* Sky Blue (#DDF3FF)
+* Peach (#FFE7DA)
+
+Add:
+
+* Hearts
+* Bows
+* Sparkles
+* Clouds
+* Stars
+* Ribbons
+* Cute stickers
+* Polaroid frames
+* Scrapbook textures
+* Paper textures
+* Plush-inspired UI
+
+All animations should feel soft and premium.
+
+---
+
+# SECTION 1 — HELLO KITTY LOADING SCREEN
+
+Create a cute loading experience featuring:
+
+* Hello Kitty inspired room aesthetic
+* Animated character illustration
+* Floating hearts
+* Sparkles
+* Animated stars
+* Loading percentage
+* Cute loading messages:
+
+  * "Preparing our memories..."
+  * "Gathering our love..."
+  * "Opening our little universe..."
+
+Animations:
+
+* Character blinking
+* Floating particles
+* Soft camera movement
+* Parallax background movement
+
+After loading:
+
+The character waves goodbye and transitions smoothly into the website.
+
+---
+
+# SECTION 2 — SCROLLING FLOWER BOUQUET EXPERIENCE
+
+Create a beautiful bouquet assembly section.
+
+As the user scrolls:
+
+* Roses appear.
+* Lilies appear.
+* Tulips appear.
+* Baby's breath flowers appear.
+* Leaves animate into place.
+* Decorative ribbons wrap around.
+* Hearts and sparkles float upward.
+
+Use:
+
+* PNG/SVG flower assets
+* Layered parallax
+* GSAP ScrollTrigger
+* Scale animations
+* Rotation animations
+* Blur effects
+* Perspective transforms
+
+The bouquet should gradually build itself while scrolling.
+
+At the end display:
+
+"You made my life bloom."
+
+---
+
+# SECTION 3 — PARALLAX LOVE MEMORIES
+
+Create a cinematic photo memory experience.
+
+Features:
+
+* Fullscreen transitions
+* Layered parallax effects
+* Floating photographs
+* Scrapbook textures
+* Cute stickers
+* Soft zoom animations
+
+As the user scrolls:
+
+* Photos slide into view.
+* Photos overlap.
+* Photos rotate slightly.
+* Photos stack together.
+* Memories transition smoothly.
+
+Use:
+
+* GSAP timelines
+* Scale effects
+* Blur transitions
+* Layered movement
+* Perspective animations
+
+---
+
+# SECTION 4 — HELLO KITTY PHOTO ALBUM
+
+Transition into a giant scrapbook album.
+
+Features:
+
+* Page opening animation
+* Cute tabs
+* Stickers
+* Handwritten notes
+* Decorative ribbons
+* Photo memories
+
+Users should be able to:
+
+* Flip pages
+* Navigate memories
+* Zoom photos
+* Open memory cards
+
+The album should feel like a real scrapbook.
+
+---
+
+# SECTION 5 — "I MISS YOU" MESSAGE WALL
+
+Create an emotional message section.
+
+Theme:
+
+"I miss you."
+
+Include:
+
+* Cute mailbox
+* Floating envelopes
+* Sticky notes
+* Animated papers
+* Soft background particles
+
+Features:
+
+* Write messages
+* Send messages
+* View messages
+* Save memories
+
+Animations:
+
+* Envelope opening
+* Paper unfolding
+* Heart particles
+* Message stacking
+
+The section should feel warm and intimate.
+
+---
+
+# SECTION 6 — PIGEON LOVE LETTER JOURNEY (NEPAL → SYDNEY)
+
+Create a cinematic scrolling sequence.
+
+As the user scrolls:
+
+A cute pigeon carrying a love letter travels from Nepal to Sydney.
+
+The journey passes through:
+
+* Mountains
+* Clouds
+* Night skies
+* Oceans
+* Stars
+* Sunsets
+
+Use:
+
+* Animated illustrations
+* Layered backgrounds
+* Parallax effects
+* GSAP timelines
+* Scroll-controlled movement
+
+When the pigeon reaches Sydney:
+
+* It lands.
+* The letter slides forward.
+* The ribbon unwraps.
+* The seal breaks.
+* The paper unfolds.
+* The love letter appears.
+
+The entire sequence should feel emotional and cinematic.
+
+---
+
+# SECTION 7 — HELLO KITTY VIRTUAL BOUQUET MAKER
+
+Create a cute virtual flower shop.
+
+Include:
+
+* Flower stands
+* Shelves
+* Plush decorations
+* Ribbons
+* Stickers
+
+Users can:
+
+* Select roses
+* Select lilies
+* Select tulips
+* Add leaves
+* Add ribbons
+* Rearrange flowers
+* Preview bouquet
+
+After creating the bouquet:
+
+Users can:
+
+* Save bouquet
+* Send bouquet
+* View received bouquets
+
+Add:
+
+* Floating hearts
+* Sparkles
+* Flower animations
+* Cute hover effects
+
+---
+
+# FINAL SECTION — OUR FOREVER
+
+Create a warm and emotional ending.
+
+The scene transitions into:
+
+* A sunset sky
+* Stars
+* Fairy lights
+* Warm lighting
+* Floating lanterns
+* Soft clouds
+
+As the user scrolls:
+
+* Memories reappear.
+* Flowers bloom.
+* Hearts float upward.
+* Stars illuminate.
+
+Display messages:
+
+"I'd choose you in every universe."
+
+"Distance never changed what home feels like."
+
+"Thank you for being my favorite person."
+
+Finally reveal:
+
+"I love you forever ❤️"
+
+Then:
+
+* Lanterns float away.
+* The camera slowly moves upward.
+* Stars fill the sky.
+* Soft music fades.
+
+---
+
+# ANIMATION REQUIREMENTS
+
+Use:
+
+* GSAP timelines
+* ScrollTrigger
+* Smooth easing
+* Layered parallax
+* Perspective transforms
+* Blur transitions
+* Scale animations
+* Rotation animations
+* Scroll storytelling
+* Soft glow effects
+
+Avoid:
+
+* Heavy Three.js scenes
+* Complex shaders
+* Physics simulations
+* Large 3D environments
+
+---
+
+# DELIVERABLES
+
+Generate:
+
+* Complete project architecture
+* Folder structure
+* React components
+* Tailwind styling
+* GSAP animations
+* ScrollTrigger timelines
+* Asset structure
+* State management
+* Responsive layouts
+* Performance optimizations
+* Reusable animation systems
+
+The final result should feel like an Awwwards-inspired interactive digital love story with a cute Hello Kitty aesthetic, emotional storytelling, smooth animations, and a premium scrapbook experience.
