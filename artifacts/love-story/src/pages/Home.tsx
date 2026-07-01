@@ -62,8 +62,41 @@ function SideNav({ active }: { active: string }) {
   );
 }
 
-export default function Home() {
-  const [loaded, setLoaded] = useState(false);
+/* Small greeting badge shown in top-right after login */
+function WelcomeBadge({ name }: { name: string }) {
+  const isSaffy = name === 'Saffy';
+  return (
+    <div
+      className="fixed top-5 right-5 z-50 flex items-center gap-2 px-4 py-2 rounded-full"
+      style={{
+        background: 'rgba(10,8,22,0.75)',
+        border: `1px solid ${isSaffy ? 'rgba(184,99,122,0.4)' : 'rgba(201,169,110,0.35)'}`,
+        backdropFilter: 'blur(10px)',
+        boxShadow: isSaffy
+          ? '0 0 20px rgba(184,99,122,0.12)'
+          : '0 0 20px rgba(201,169,110,0.1)',
+      }}
+    >
+      <span style={{ fontSize: '1rem' }}>{isSaffy ? '🌸' : '💙'}</span>
+      <span
+        style={{
+          fontFamily: "'Cormorant Garamond', serif",
+          fontStyle: 'italic',
+          fontSize: '1rem',
+          color: isSaffy ? '#E8A0B4' : '#C9A96E',
+          letterSpacing: '0.04em',
+        }}
+      >
+        {name}
+      </span>
+    </div>
+  );
+}
+
+interface Props { userName?: string; }
+
+export default function Home({ userName = '' }: Props) {
+  const [loaded, setLoaded]           = useState(false);
   const [activeSection, setActiveSection] = useState('bouquet');
   const observerRef = useRef<IntersectionObserver | null>(null);
 
@@ -90,6 +123,7 @@ export default function Home() {
       {loaded && (
         <>
           <SideNav active={activeSection} />
+          {userName && <WelcomeBadge name={userName} />}
           <main style={{ background: '#0A0816' }}>
             <BouquetSection />
             <MemoriesSection />

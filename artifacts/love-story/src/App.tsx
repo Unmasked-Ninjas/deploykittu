@@ -28,15 +28,23 @@ function LenisSync() {
 }
 
 function AuthGate() {
-  const [authed, setAuthed] = useState<boolean | null>(null);
+  const [authed, setAuthed]     = useState<boolean | null>(null);
+  const [userName, setUserName] = useState<string>('');
 
   useEffect(() => {
     const token = localStorage.getItem('ls_token');
     if (!token) { setAuthed(false); return; }
     fetch('/api/auth/verify', { headers: { Authorization: `Bearer ${token}` } })
       .then(r => {
-        if (r.ok) setAuthed(true);
-        else { localStorage.removeItem('ls_token'); setAuthed(false); }
+        if (r.ok) {
+          const saved = localStorage.getItem('ls_user') ?? '';
+          setUserName(saved);
+          setAuthed(true);
+        } else {
+          localStorage.removeItem('ls_token');
+          localStorage.removeItem('ls_user');
+          setAuthed(false);
+        }
       })
       .catch(() => setAuthed(false));
   }, []);
@@ -50,13 +58,20 @@ function AuthGate() {
   }
 
   if (!authed) {
-    return <LoginPage onLogin={() => setAuthed(true)} />;
+    return (
+      <LoginPage
+        onLogin={(name) => {
+          setUserName(name);
+          setAuthed(true);
+        }}
+      />
+    );
   }
 
   return (
     <ReactLenis root options={{ lerp: 0.07, duration: 1.4, smoothWheel: true, wheelMultiplier: 0.85, touchMultiplier: 1.5 }}>
       <LenisSync />
-      <Home />
+      <Home userName={userName} />
     </ReactLenis>
   );
 }
