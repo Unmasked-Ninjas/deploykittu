@@ -273,7 +273,7 @@ export default function BouquetSection() {
   }, { scope: sectionRef });
 
   return (
-    <section ref={sectionRef} id="bouquet" className="relative overflow-hidden" style={{ height: '500vh', background: '#130B22' }}>
+    <section ref={sectionRef} id="bouquet" className="relative overflow-hidden" style={{ height: '250vh', background: '#130B22' }}>
       <div className="sticky top-0 h-screen flex flex-col items-center justify-center overflow-hidden">
         {/* Background glow */}
         <div className="absolute inset-0 pointer-events-none" style={{ background: 'radial-gradient(ellipse 55% 65% at 50% 55%, rgba(184,99,122,0.07) 0%, rgba(201,169,110,0.04) 40%, transparent 70%)' }} />
@@ -342,10 +342,10 @@ export default function BouquetSection() {
         <div ref={textRef} className="text-center" style={{ marginTop: '-20px', willChange: 'transform, opacity' }}>
           <p style={{ fontFamily: "'Cormorant Garamond', serif", fontStyle: 'italic', fontSize: 'clamp(1.8rem, 3.5vw, 2.8rem)', color: '#C9A96E' }}
             className="gold-glow">
-            You made my life bloom.
+            Happy 10 month anniversary baby 🐱
           </p>
           <p style={{ fontFamily: "'Montserrat', sans-serif", fontWeight: 300, fontSize: '0.72rem', letterSpacing: '0.38em', color: 'rgba(240,230,214,0.35)', textTransform: 'uppercase', marginTop: '0.6rem' }}>
-            Nepal × Sydney, always
+            i love you
           </p>
         </div>
       </div>

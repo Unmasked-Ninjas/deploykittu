@@ -2,23 +2,17 @@ import { useState, useEffect, useRef } from 'react';
 import LoadingScreen from '@/components/LoadingScreen';
 import BouquetSection from '@/components/BouquetSection';
 import MemoriesSection from '@/components/MemoriesSection';
-import MapSection from '@/components/MapSection';
 import PhotoAlbumSection from '@/components/PhotoAlbumSection';
-import CountdownSection from '@/components/CountdownSection';
 import MessageWallSection from '@/components/MessageWallSection';
 import PigeonJourneySection from '@/components/PigeonJourneySection';
-import BouquetMakerSection from '@/components/BouquetMakerSection';
 import ForeverSection from '@/components/ForeverSection';
 
 const SECTIONS = [
   { id: 'bouquet',   label: 'A Bouquet' },
   { id: 'memories',  label: 'Memories' },
-  { id: 'map',       label: 'Our Distance' },
   { id: 'album',     label: 'Our Story' },
-  { id: 'countdown', label: 'Countdown' },
   { id: 'messages',  label: 'Miss You' },
   { id: 'journey',   label: 'The Journey' },
-  { id: 'maker',     label: 'Bouquet Maker' },
   { id: 'forever',   label: 'Forever' },
 ];
 
@@ -62,7 +56,6 @@ function SideNav({ active }: { active: string }) {
   );
 }
 
-/* Small greeting badge shown in top-right after login */
 function WelcomeBadge({ name }: { name: string }) {
   const isSaffy = name === 'Saffy';
 
@@ -79,9 +72,7 @@ function WelcomeBadge({ name }: { name: string }) {
         background: 'rgba(10,8,22,0.75)',
         border: `1px solid ${isSaffy ? 'rgba(184,99,122,0.4)' : 'rgba(201,169,110,0.35)'}`,
         backdropFilter: 'blur(10px)',
-        boxShadow: isSaffy
-          ? '0 0 20px rgba(184,99,122,0.12)'
-          : '0 0 20px rgba(201,169,110,0.1)',
+        boxShadow: isSaffy ? '0 0 20px rgba(184,99,122,0.12)' : '0 0 20px rgba(201,169,110,0.1)',
       }}
     >
       <span style={{ fontSize: '1rem' }}>{isSaffy ? '🌸' : '💙'}</span>
@@ -122,7 +113,7 @@ function WelcomeBadge({ name }: { name: string }) {
 interface Props { userName?: string; }
 
 export default function Home({ userName = '' }: Props) {
-  const [loaded, setLoaded]           = useState(false);
+  const [loaded, setLoaded]               = useState(false);
   const [activeSection, setActiveSection] = useState('bouquet');
   const observerRef = useRef<IntersectionObserver | null>(null);
 
@@ -153,12 +144,9 @@ export default function Home({ userName = '' }: Props) {
           <main style={{ background: '#0A0816' }}>
             <BouquetSection />
             <MemoriesSection />
-            <MapSection />
             <PhotoAlbumSection />
-            <CountdownSection />
             <MessageWallSection />
             <PigeonJourneySection />
-            <BouquetMakerSection />
             <ForeverSection />
           </main>
         </>
