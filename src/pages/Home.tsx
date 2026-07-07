@@ -1,31 +1,29 @@
-import React, { useState, useEffect } from 'react';
-import { AnimatePresence } from 'framer-motion';
-import LoadingScreen from '@/components/LoadingScreen';
-import BouquetSection from '@/components/BouquetSection';
-import MemoriesSection from '@/components/MemoriesSection';
-import MapSection from '@/components/MapSection';
-import PhotoAlbumSection from '@/components/PhotoAlbumSection';
-import CountdownSection from '@/components/CountdownSection';
-import MessageWallSection from '@/components/MessageWallSection';
-import PigeonJourneySection from '@/components/PigeonJourneySection';
-import BouquetMakerSection from '@/components/BouquetMakerSection';
-import ForeverSection from '@/components/ForeverSection';
+import React, { useState, useEffect } from "react";
+import { AnimatePresence } from "framer-motion";
+import LoadingScreen from "@/components/LoadingScreen";
+import BouquetSection from "@/components/BouquetSection";
+import MapSection from "@/components/MapSection";
+import PhotoAlbumSection from "@/components/PhotoAlbumSection";
+import CountdownSection from "@/components/CountdownSection";
+import MessageWallSection from "@/components/MessageWallSection";
+import PigeonJourneySection from "@/components/PigeonJourneySection";
+import BouquetMakerSection from "@/components/BouquetMakerSection";
+import ForeverSection from "@/components/ForeverSection";
 
 const SECTIONS = [
-  { id: 'bouquet', label: 'Bloom' },
-  { id: 'memories', label: 'Memories' },
-  { id: 'map', label: 'Distance' },
-  { id: 'album', label: 'Story' },
-  { id: 'countdown', label: 'Time' },
-  { id: 'messages', label: 'Letters' },
-  { id: 'journey', label: 'Journey' },
-  { id: 'maker', label: 'Bouquet' },
-  { id: 'forever', label: 'Forever' }
+  { id: "bouquet", label: "Bloom" },
+  { id: "map", label: "Distance" },
+  { id: "album", label: "Story" },
+  { id: "countdown", label: "Time" },
+  { id: "messages", label: "Letters" },
+  { id: "journey", label: "Journey" },
+  { id: "maker", label: "Bouquet" },
+  { id: "forever", label: "Forever" },
 ];
 
 export default function Home() {
   const [loading, setLoading] = useState(true);
-  const [activeSection, setActiveSection] = useState('bouquet');
+  const [activeSection, setActiveSection] = useState("bouquet");
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -36,23 +34,23 @@ export default function Home() {
 
   useEffect(() => {
     if (loading) return;
-    
+
     const observers = new Map();
     const callbacks = (entries: IntersectionObserverEntry[]) => {
-      entries.forEach(entry => {
+      entries.forEach((entry) => {
         if (entry.isIntersecting) {
           setActiveSection(entry.target.id);
         }
       });
     };
-    
+
     const observer = new IntersectionObserver(callbacks, {
       root: null,
-      rootMargin: '-40% 0px -40% 0px',
-      threshold: 0
+      rootMargin: "-40% 0px -40% 0px",
+      threshold: 0,
     });
 
-    SECTIONS.forEach(section => {
+    SECTIONS.forEach((section) => {
       const el = document.getElementById(section.id);
       if (el) observer.observe(el);
     });
@@ -63,16 +61,18 @@ export default function Home() {
   const scrollTo = (id: string) => {
     const el = document.getElementById(id);
     if (el) {
-      el.scrollIntoView({ behavior: 'smooth' });
+      el.scrollIntoView({ behavior: "smooth" });
     }
   };
 
   return (
     <main className="w-full bg-[#0A0816] relative selection:bg-[#B8637A]/30 selection:text-[#F0E6D6]">
       <AnimatePresence>
-        {loading && <LoadingScreen key="loading" onComplete={() => setLoading(false)} />}
+        {loading && (
+          <LoadingScreen key="loading" onComplete={() => setLoading(false)} />
+        )}
       </AnimatePresence>
-      
+
       {!loading && (
         <>
           {/* Side Navigation */}
@@ -84,10 +84,12 @@ export default function Home() {
                 className="group relative flex items-center"
                 aria-label={`Scroll to ${section.label}`}
               >
-                <div 
+                <div
                   className={`w-2 h-2 rounded-full transition-all duration-300 ${
-                    activeSection === section.id ? 'bg-[#C9A96E] scale-150 shadow-[0_0_8px_rgba(201,169,110,0.8)]' : 'bg-[#F0E6D6]/20 hover:bg-[#C9A96E]/50'
-                  }`} 
+                    activeSection === section.id
+                      ? "bg-[#C9A96E] scale-150 shadow-[0_0_8px_rgba(201,169,110,0.8)]"
+                      : "bg-[#F0E6D6]/20 hover:bg-[#C9A96E]/50"
+                  }`}
                 />
                 <span className="absolute left-6 font-sans font-light text-xs text-[#F0E6D6]/80 opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none">
                   {section.label}
@@ -97,15 +99,30 @@ export default function Home() {
           </nav>
 
           <div className="w-full">
-            <div id="bouquet"><BouquetSection /></div>
-            <div id="memories"><MemoriesSection /></div>
-            <div id="map"><MapSection /></div>
-            <div id="album"><PhotoAlbumSection /></div>
-            <div id="countdown"><CountdownSection /></div>
-            <div id="messages"><MessageWallSection /></div>
-            <div id="journey"><PigeonJourneySection /></div>
-            <div id="maker"><BouquetMakerSection /></div>
-            <div id="forever"><ForeverSection /></div>
+            <div id="bouquet">
+              <BouquetSection />
+            </div>
+            <div id="map">
+              <MapSection />
+            </div>
+            <div id="album">
+              <PhotoAlbumSection />
+            </div>
+            <div id="countdown">
+              <CountdownSection />
+            </div>
+            <div id="messages">
+              <MessageWallSection />
+            </div>
+            <div id="journey">
+              <PigeonJourneySection />
+            </div>
+            <div id="maker">
+              <BouquetMakerSection />
+            </div>
+            <div id="forever">
+              <ForeverSection />
+            </div>
           </div>
         </>
       )}

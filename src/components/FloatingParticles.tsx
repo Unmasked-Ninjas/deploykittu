@@ -8,6 +8,7 @@ interface FloatingParticlesProps {
   speed?: 'slow' | 'medium' | 'fast';
 }
 
+
 export default function FloatingParticles({ count, type = 'dot', color = '#C9A96E', size = 4, speed = 'medium' }: FloatingParticlesProps) {
   const getIcon = () => {
     if (type === 'heart') return (
