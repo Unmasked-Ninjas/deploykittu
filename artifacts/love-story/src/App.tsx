@@ -32,17 +32,17 @@ function AuthGate() {
   const [userName, setUserName] = useState<string>('');
 
   useEffect(() => {
-    const token = localStorage.getItem('ls_token');
+    const token = localStorage.getItem('ls_token_v2');
     if (!token) { setAuthed(false); return; }
     fetch('/api/auth/verify', { headers: { Authorization: `Bearer ${token}` } })
       .then(r => {
         if (r.ok) {
-          const saved = localStorage.getItem('ls_user') ?? '';
+          const saved = localStorage.getItem('ls_user_v2') ?? '';
           setUserName(saved);
           setAuthed(true);
         } else {
-          localStorage.removeItem('ls_token');
-          localStorage.removeItem('ls_user');
+          localStorage.removeItem('ls_token_v2');
+          localStorage.removeItem('ls_user_v2');
           setAuthed(false);
         }
       })

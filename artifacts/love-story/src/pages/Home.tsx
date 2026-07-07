@@ -65,6 +65,13 @@ function SideNav({ active }: { active: string }) {
 /* Small greeting badge shown in top-right after login */
 function WelcomeBadge({ name }: { name: string }) {
   const isSaffy = name === 'Saffy';
+
+  function logout() {
+    localStorage.removeItem('ls_token_v2');
+    localStorage.removeItem('ls_user_v2');
+    window.location.reload();
+  }
+
   return (
     <div
       className="fixed top-5 right-5 z-50 flex items-center gap-2 px-4 py-2 rounded-full"
@@ -89,6 +96,25 @@ function WelcomeBadge({ name }: { name: string }) {
       >
         {name}
       </span>
+      <button
+        onClick={logout}
+        title="Log out"
+        style={{
+          marginLeft: '4px',
+          background: 'none',
+          border: 'none',
+          cursor: 'pointer',
+          fontSize: '0.7rem',
+          color: 'rgba(240,230,214,0.3)',
+          padding: '0 2px',
+          lineHeight: 1,
+          transition: 'color 0.2s',
+        }}
+        onMouseEnter={e => { e.currentTarget.style.color = 'rgba(240,230,214,0.7)'; }}
+        onMouseLeave={e => { e.currentTarget.style.color = 'rgba(240,230,214,0.3)'; }}
+      >
+        ✕
+      </button>
     </div>
   );
 }

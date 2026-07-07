@@ -102,7 +102,7 @@ export default function LoginPage({ onLogin }: Props) {
       });
       const data = await res.json();
       if (res.ok) {
-        localStorage.setItem('ls_token', data.token);
+        localStorage.setItem('ls_token_v2', data.token);
         setStep('identity');
       } else {
         setError('Oopsie! Wrong password 🙈 Try again~');
@@ -117,7 +117,7 @@ export default function LoginPage({ onLogin }: Props) {
   }
 
   function choosePerson(name: string) {
-    localStorage.setItem('ls_user', name);
+    localStorage.setItem('ls_user_v2', name);
     onLogin(name);
   }
 
