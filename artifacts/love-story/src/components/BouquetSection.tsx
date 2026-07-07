@@ -340,10 +340,37 @@ export default function BouquetSection() {
 
         {/* Final text */}
         <div ref={textRef} className="text-center" style={{ marginTop: '-20px', willChange: 'transform, opacity' }}>
-          <p style={{ fontFamily: "'Cormorant Garamond', serif", fontStyle: 'italic', fontSize: 'clamp(1.8rem, 3.5vw, 2.8rem)', color: '#C9A96E' }}
-            className="gold-glow">
-            Happy 10 month anniversary baby 🐱
-          </p>
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.5rem' }}>
+            <p style={{ fontFamily: "'Cormorant Garamond', serif", fontStyle: 'italic', fontSize: 'clamp(1.8rem, 3.5vw, 2.8rem)', color: '#C9A96E', margin: 0 }}
+              className="gold-glow">
+              Happy 10 month anniversary baby
+            </p>
+            {/* Kittu cat SVG */}
+            <svg viewBox="0 0 120 105" width="42" height="37" style={{ display: 'inline-block', verticalAlign: 'middle', flexShrink: 0 }}>
+              <ellipse cx="30" cy="26" rx="17" ry="17" fill="white" />
+              <ellipse cx="90" cy="26" rx="17" ry="17" fill="white" />
+              <ellipse cx="30" cy="26" rx="9" ry="9" fill="#FFD6EA" />
+              <ellipse cx="90" cy="26" rx="9" ry="9" fill="#FFD6EA" />
+              <ellipse cx="60" cy="64" rx="46" ry="42" fill="white" />
+              <ellipse cx="32" cy="72" rx="10" ry="7" fill="#FFB6D4" opacity="0.55" />
+              <ellipse cx="88" cy="72" rx="10" ry="7" fill="#FFB6D4" opacity="0.55" />
+              <ellipse cx="45" cy="58" rx="6" ry="7" fill="#1a1a1a" />
+              <ellipse cx="75" cy="58" rx="6" ry="7" fill="#1a1a1a" />
+              <circle cx="47.5" cy="55.5" r="2" fill="white" />
+              <circle cx="77.5" cy="55.5" r="2" fill="white" />
+              <ellipse cx="65" cy="69" rx="4" ry="3" fill="#FFAA00" />
+              <line x1="14" y1="62" x2="40" y2="66" stroke="#d4b8cb" strokeWidth="1.2" strokeLinecap="round" />
+              <line x1="14" y1="70" x2="40" y2="70" stroke="#d4b8cb" strokeWidth="1.2" strokeLinecap="round" />
+              <line x1="14" y1="78" x2="40" y2="74" stroke="#d4b8cb" strokeWidth="1.2" strokeLinecap="round" />
+              <line x1="106" y1="62" x2="80" y2="66" stroke="#d4b8cb" strokeWidth="1.2" strokeLinecap="round" />
+              <line x1="106" y1="70" x2="80" y2="70" stroke="#d4b8cb" strokeWidth="1.2" strokeLinecap="round" />
+              <line x1="106" y1="78" x2="80" y2="74" stroke="#d4b8cb" strokeWidth="1.2" strokeLinecap="round" />
+              <path d="M87,18 C80,9 70,11 73,18 C70,25 80,27 87,18Z" fill="#FF2D55" />
+              <path d="M87,18 C94,9 104,11 101,18 C104,25 94,27 87,18Z" fill="#FF2D55" />
+              <circle cx="87" cy="18" r="5" fill="#FF2D55" />
+              <circle cx="87" cy="18" r="2.5" fill="#FF6B8A" />
+            </svg>
+          </div>
           <p style={{ fontFamily: "'Montserrat', sans-serif", fontWeight: 300, fontSize: '0.72rem', letterSpacing: '0.38em', color: 'rgba(240,230,214,0.35)', textTransform: 'uppercase', marginTop: '0.6rem' }}>
             i love you
           </p>
